@@ -10,5 +10,3 @@ jobs:
         uses: cjgibbons/render-latest-plantuml-to-wiki-action@v2
         with:
           WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
-          INPUT_DIR: '.'
-          OUTPUT_DIR: '.'
