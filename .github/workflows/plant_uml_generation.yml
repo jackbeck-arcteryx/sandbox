@@ -1,4 +1,4 @@
-- name: Generate Plantuml
+  - name: Generate Plantuml
   # You may pin to the exact commit or the version.
   # uses: grassedge/generate-plantuml-action@4936762686b831393728392054322cfde20645e8
   uses: grassedge/generate-plantuml-action@v1.5
