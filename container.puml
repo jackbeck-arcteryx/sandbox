@@ -2,45 +2,43 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 System_Ext(ext1, "External System")
+ContainerQueue_Ext(extEvents, "External Event Stream")
 
 System_Boundary(sys, "Pet Store") {
   Container(api, "API Gateway")
-  Container(trans, "Transaction Service")
 
-  Container(write, "Write Service")
-  Container(read, "Read Service")
+  Container_Boundary(domainServices, "Domain Services") {
+    Container(pet, "Pet")
+    Container(store, "Store")
+    Container(user, "User")
+  }
 
-  Container(writeWorker, "Write Service Worker")
-
-  ContainerQueue(events, "Internal Event Stream")
-
-  Container(ingester, "Ingester Service")
-  Container(publisher, "Publisher Service")
-
+  Container_Boundary(writeServices, "Write Services") {
+    Container(writeWorker, "Write Worker")
+    ContainerQueue(writes, "Write Events")
+    Container(publisher, "Publisher")
+  }
+  
+  Container(ingester, "Ingester")
+  
   ContainerDb(db, "Document Store")
-
 }
 
-ContainerQueue_Ext(extEvents, "External Event Stream")
-System_Ext(ext2, "External System")
+Rel_D(ext1, api, "API Calls", "HTTPS")
 
-Rel(ext1, api, "API Calls", "HTTPS")
-Rel(api, trans, "")
+Rel(ingester, extEvents, "Subscribes")
+Rel_U(ingester, api, "")
 
-Rel(trans, write, "")
-Rel(trans, read, "")
+Rel_D(api, domainServices, "")
 
-Rel_D(write, events, "Publishes")
-Rel_D(read, db, "Reads")
 
-Rel_D(writeWorker, events, "Subscribes, Consumes")
-Rel_U(writeWorker, db, "Writes")
+Rel_D(domainServices, writes, "Publishes")
+Rel(domainServices, db, "Reads")
 
-Rel_D(ingester, extEvents, "Subscribes, Consumes")
-Rel_U(ingester, write, "Calls")
+Rel_U(writeWorker, writes, "Subscribes")
+Rel_L(writeWorker, db, "Writes")
 
-Rel_D(publisher, extEvents, "Publishes")
-Rel_U(publisher, events, "Subscribes, Consumes")
+Rel_R(publisher, writes, "Subscribes")
+Rel(publisher, extEvents, "Publishes")
 
-Rel_U(ext2, extEvents, "Publishes, Subscribes, Consumes")
 @enduml
