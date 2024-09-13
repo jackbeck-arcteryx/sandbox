@@ -1,6 +1,14 @@
-- name: Render PlantUML to wiki
-  uses: cjgibbons/render-latest-plantuml-to-wiki-action@v2
-  with:
-    WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
-    INPUT_DIR: 'path/to/input_directory'
-    OUTPUT_DIR: 'path/to/output_directory'
+name: Generate PlantUML Diagrams
+on: 
+  workflow_dispatch:
+
+jobs:
+  plantuml:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Render PlantUML to wiki
+        uses: cjgibbons/render-latest-plantuml-to-wiki-action@v2
+        with:
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
+          INPUT_DIR: '.'
+          OUTPUT_DIR: '.'
