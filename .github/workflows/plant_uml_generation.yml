@@ -1,20 +1,14 @@
-name: generate plantuml
+name: Generate PlantUML Diagrams
 on: 
   workflow_dispatch:
+
 jobs:
-  generate_plantuml:
+  plantuml:
     runs-on: ubuntu-latest
-    name: plantuml
     steps:
-    - name: checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-    - name: plantuml
-      id: plantuml
-      uses: grassedge/generate-plantuml-action@v1.5
-      with:
-        path: example
-        message: "Render PlantUML files"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Render PlantUML to wiki
+        uses: cjgibbons/render-latest-plantuml-to-wiki-action@v2
+        with:
+          WIKI_TOKEN: ${{ secrets.WIKI_TOKEN }}
+          INPUT_DIR: '/'
+          OUTPUT_DIR: '/'
