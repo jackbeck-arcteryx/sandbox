@@ -1,0 +1,33 @@
+C4Container
+  title Container diagram for Omnichannel Pet Store
+
+  Enterprise_Boundary(b0, "Arc'teryx Sysems") {
+  
+  System_Ext(ext1, "External System")
+  ContainerQueue_Ext(extEvents, "External Event Stream")
+
+    System_Boundary(sys, "Pet Store") {
+      Container(api, "API Gateway")
+
+      Container_Boundary(domainServices, "Domain Services") {
+        Container(pet, "Pet")
+        Container(store, "Store")
+        Container(user, "User")
+      }
+
+      Container_Boundary(writeServices, "Write Services") {
+        Container(writeWorker, "Write Worker")
+        ContainerQueue(writes, "Write Events")
+        Container(publisher, "Publisher")
+      }
+
+      Container(ingester, "Ingester")
+      ContainerDb(db, "Document Store")
+    }
+
+    Rel_D(ext1, api, "API Calls", "HTTPS")
+    Rel(ingester, extEvents, "Subscribes")
+    Rel_U(ingester, api, "")
+
+    
+  }
